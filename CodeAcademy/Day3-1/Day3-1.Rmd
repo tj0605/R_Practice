@@ -1,0 +1,120 @@
+---
+title: "Cleaning US Census Data"
+output: html_notebook
+---
+
+```{r message=FALSE, warning=FALSE}
+# load libraries
+library(readr)
+library(dplyr)
+library(tidyr)
+```
+
+```{r message=FALSE, warning=FALSE}
+# load CSVs
+files <- list.files(pattern = "states_.*csv")
+df_list <- lapply(files,read_csv)
+us_census <- bind_rows(df_list)
+```
+
+```{r}
+# inspect data
+str(us_census)
+head(us_census)
+```
+
+```{r}
+# drop X1 column
+us_census <- us_census %>%
+select(-X1)
+head(us_census)
+```
+
+```{r}
+# remove % from race columns
+us_census <- us_census %>%
+mutate(Hispanic = gsub('\\%','',Hispanic)) %>%
+mutate(White = gsub('\\%','',White)) %>%
+mutate(Black = gsub('\\%','',Black)) %>%
+mutate(Native = gsub('\\%','',Native)) %>%
+mutate(Asian = gsub('\\%','',Asian)) %>%
+mutate(Pacific = gsub('\\%','',Pacific))
+head(us_census)
+```
+
+```{r}
+# remove $ from Income column
+us_census <- us_census %>%
+mutate(Income = gsub('\\$','',Income))
+head(us_census)
+```
+
+```{r}
+# separate GenderPop column
+us_census <- us_census %>%
+separate(GenderPop,c('male_pop','female_pop'),'_')
+head(us_census)
+```
+
+```{r}
+# clean male and female population columns
+us_census <- us_census %>%
+mutate(male_pop = gsub('M','',male_pop)) %>%
+mutate(female_pop = gsub('F','',female_pop))
+head(us_census)
+```
+
+```{r}
+# update column data types
+us_census <- us_census %>%
+mutate(Hispanic = as.numeric(Hispanic),
+      White = as.numeric(White),
+      Black = as.numeric(Black),
+      Native = as.numeric(Native),
+      Asian = as.numeric(Asian),
+      Pacific = as.numeric(Pacific),
+      Income = as.numeric(Income),
+      male_pop = as.numeric(male_pop),
+      female_pop = as.numeric(female_pop))
+head(us_census)
+```
+
+```{r}
+# update values of race columns
+us_census <- us_census %>%
+mutate(Hispanic = Hispanic/100,
+      White = White/100,
+      Black = Black/100,
+      Native = Native/100,
+      Asian = Asian/100,
+      Pacific = Pacific/100)
+head(us_census)
+```
+
+```{r}
+# check for duplicate rows
+duplicate <- us_census %>%
+duplicated()
+duplicate %>%
+table()
+```
+
+```{r}
+# remove duplicate rows
+us_census <- us_census %>%
+distinct()
+head(us_census)
+```
+
+```{r}
+# check for duplicate rows
+update_duplicate <- us_census %>%
+duplicated()
+update_duplicate %>%
+table()
+```
+
+```{r}
+# clean data frame
+head(us_census)
+```
