@@ -1,0 +1,183 @@
+---
+title: "Data Cleaning in R"
+output: html_notebook
+---
+
+```{r message=FALSE, warning=FALSE}
+# load libraries
+library(readr)
+library(dplyr)
+```
+
+```{r message=FALSE}
+# read CSVs
+grocery_1 <- read_csv('grocery_1.csv')
+grocery_2 <- read_csv('grocery_2.csv')
+```
+
+```{r}
+# inspect data frames
+head(grocery_1)
+head(grocery_2)
+```
+
+```{r}
+# clean data frame
+clean_data_frame <- 2
+```
+
+```{r}
+# list files
+student_files <- list.files(pattern = "exams_.*csv")
+```
+
+```{r message=FALSE}
+# read files
+df_list <- lapply(student_files,read_csv)
+```
+
+```{r}
+# concatenate data frames
+students <- bind_rows(df_list)
+
+```
+
+```{r}
+# number of rows in students
+nrow_students <- nrow(students)
+```
+
+```{r}
+# original column names
+original_col_names <- colnames(students)
+original_col_names
+```
+
+```{r}
+# gather columns
+students <- students %>%
+gather('fractions','probability',key='exam',value='score')
+head(students)
+```
+
+```{r}
+# updated column names
+gathered_col_names <- colnames(students)
+gathered_col_names
+```
+
+```{r}
+# unique value counts of exam
+exam_counts <- students %>%
+count(exam)
+exam_counts
+```
+
+```{r}
+# drop id column
+students <- students %>%
+select(-id)
+head(students)
+```
+
+```{r}
+# find and count duplicated rows
+duplicates <- students %>%
+duplicated()
+
+duplicates <- duplicates %>%
+table()
+duplicates
+```
+
+```{r}
+# remove duplicated rows
+students <- students %>%
+distinct()
+```
+
+```{r}
+# find and count duplicated rows in updated data frame
+updated_duplicates <- students %>%
+duplicated()
+
+updated_duplicates <- updated_duplicates %>%
+table()
+updated_duplicates
+```
+
+```{r}
+# print columns of students
+colnames(students)
+```
+
+```{r}
+# view head of students
+head(students)
+```
+
+```{r}
+# add gender and age columns
+students <- students %>%
+  mutate(gender = str_sub(gender_age,1,1))
+
+students <- students %>%
+  mutate(age = str_sub(gender_age,2,3))
+head(students)
+```
+
+```{r}
+# drop gender_age column
+students <- students %>%
+  select(-gender_age)
+head(students)
+```
+
+```{r}
+# view the head of students
+head(students)
+```
+
+```{r}
+# separate the full_name column
+students <- students %>%
+separate(full_name,c('first_name','last_name'),' ', extra='merge')
+head(students)
+```
+
+```{r}
+# print structure of students
+str(students)
+```
+
+```{r}
+# mean of age column
+students %>% 
+  summarise(mean_score = mean(score))
+## Warning in mean.default(score): argument is not numeric or logical: returning NA
+```
+
+```{r}
+# view head of students
+head(students)
+```
+
+```{r}
+# remove % from score column
+students <- students %>%
+mutate(score = gsub('\\%','',score))
+head(students)
+```
+
+```{r}
+# change score column to numeric
+students <- students %>%
+mutate(score = as.numeric(score))
+head(students)
+```
+
+```{r}
+# update age column
+students <- students %>%
+mutate(age = as.numeric(age))
+```
