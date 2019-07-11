@@ -1,0 +1,107 @@
+---
+title: "Aggregates in R"
+output: html_notebook
+---
+
+```{r message = FALSE}
+# load packages
+library(readr)
+library(dplyr)
+```
+
+```{r message = FALSE}
+# load order data
+orders <- read_csv("orders.csv")
+
+# inspect orders here:
+head(orders,10)
+```
+
+```{r}
+# define most_expensive here:
+# inspect orders here:
+head(orders,10)
+```
+
+```{r}
+# define most_expensive here:
+most_expensive <- orders %>%
+summarize(most_expensive = max(price,na.rm=TRUE))
+```
+
+```{r}
+# define num_colors here:
+num_colors <- orders %>%
+summarize(num_colors = n_distinct(shoe_color))
+```
+
+```{r}
+# define pricey_shoes here:
+pricey_shoes <- orders %>%
+group_by(shoe_type) %>%
+summarize(pricey_shoes = max(price, na.rm=TRUE))
+pricey_shoes
+```
+
+```{r}
+# define shoes_sold here:
+shoes_sold <- orders %>%
+group_by(shoe_type) %>%
+summarize(shoes_sold = n())
+shoes_sold
+```
+
+```{r}
+# define shoe_counts here:
+shoe_counts <- orders %>%
+group_by(shoe_type,shoe_color)%>%
+summarize(shoe_counts = n())
+shoe_counts
+```
+
+```{r}
+# define shoe_prices here:
+shoe_prices <- orders %>%
+group_by(shoe_type,shoe_material)%>%
+summarize(shoe_prices = mean(price,na.rm=TRUE))
+shoe_prices
+```
+
+```{r}
+# define most_pop_orders here:
+most_pop_orders <- orders %>%
+group_by(shoe_type) %>%
+filter(n()>16)
+most_pop_orders
+```
+
+```{r}
+# define diff_from_mean here:
+diff_from_mean <- orders %>%
+group_by(shoe_type) %>%
+mutate(diff_from_shoe_type_mean = price - mean(price, na.rm = TRUE))
+diff_from_mean
+```
+
+```{r}
+# define average_price here:
+average_price <- orders %>%
+summarize(average_price = mean(price,na.rm=TRUE))
+
+average_price
+```
+
+```{r}
+# define click_source here:
+click_source <- page_visits %>%
+group_by(utm_source) %>%
+summarize(click_source=n())
+
+click_source
+```
+
+```{r}
+# define click_source_by_month here:
+click_source_by_month <- page_visits %>%
+group_by(utm_source,month) %>%
+summarize(click_source_by_month = n())
