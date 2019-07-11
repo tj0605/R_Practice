@@ -1,0 +1,119 @@
+---
+title: "A/B Testing for ShoeFly.com"
+output: html_notebook
+---
+
+```{r message = FALSE}
+# load packages
+library(readr)
+library(dplyr)
+```
+
+```{r message = FALSE}
+# load ad clicks data
+ad_clicks <- read_csv("ad_clicks.csv")
+```
+
+```{r}
+# inspect ad_clicks here:
+head(ad_clicks)
+```
+
+```{r}
+# define views_by_utm here:
+views_by_utm <- ad_clicks %>%
+group_by(utm_source) %>%
+summarize(views_by_utm = n())
+
+views_by_utm
+```
+
+```{r}
+# define clicks_by_utm here:
+clicks_by_utm <- ad_clicks %>%
+group_by(utm_source,ad_clicked) %>%
+summarize(count = n())
+
+clicks_by_utm
+```
+
+```{r}
+# define percentage_by_utm here:
+percentage_by_utm <- clicks_by_utm %>%
+group_by(utm_source) %>%
+mutate(percentage = count/sum(count))
+
+percentage_by_utm %>%
+filter(ad_clicked == TRUE)
+## facebook has the highest click rate
+
+```
+
+```{r}
+# define experiment_split here:
+experiment_split <- ad_clicks %>%
+group_by(experimental_group) %>%
+summarize(experiment_split = n())
+
+experiment_split
+```
+
+```{r}
+# define clicks_by_experiment here:
+clicks_by_experiment <- ad_clicks %>%
+group_by(ad_clicked, experimental_group) %>%
+summarize(clicks_by_experiment = n())
+
+clicks_by_experiment
+## A is more effective ads
+```
+
+```{r}
+# define a_clicks here:
+a_clicks <- ad_clicks %>%
+filter(experimental_group=='A')
+
+a_clicks
+
+# define b_clicks here:
+b_clicks <- ad_clicks %>%
+filter(experimental_group=='B')
+
+b_clicks
+```
+
+```{r}
+# define a_clicks_by_day here:
+a_clicks_by_day <- a_clicks %>%
+group_by(day, ad_clicked) %>%
+summarize(a_clicks_by_day = n())
+
+a_clicks_by_day
+
+# define b_clicks_by_day here:
+b_clicks_by_day <- b_clicks %>%
+group_by(day, ad_clicked) %>%
+summarize(b_clicks_by_day = n())
+
+b_clicks_by_day
+```
+
+```{r}
+# define a_percentage_by_day here:
+a_percentage_by_day <- a_clicks_by_day %>%
+group_by(day) %>%
+mutate(percentage = a_clicks_by_day/sum(a_clicks_by_day))
+
+a_percentage_by_day %>%
+filter(ad_clicked == TRUE)
+
+# define b_percentage_by_day here:
+b_percentage_by_day <- b_clicks_by_day %>%
+group_by(day) %>%
+mutate(percentage = b_clicks_by_day/sum(b_clicks_by_day))
+
+b_percentage_by_day %>%
+filter(ad_clicked == TRUE)
+
+## overall click rate of 'a' is higher than 'b'
+```
