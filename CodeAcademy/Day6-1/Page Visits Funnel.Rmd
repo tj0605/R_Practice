@@ -1,0 +1,147 @@
+---
+title: "Page Visits Funnel"
+output: html_notebook
+---
+
+```{r message = FALSE}
+# load packages
+library(readr)
+library(dplyr)
+```
+
+```{r message = FALSE}
+# load data
+visits <- read_csv("visits.csv")
+cart <- read_csv("cart.csv")
+checkout <- read_csv("checkout.csv")
+purchase <- read_csv("purchase.csv")
+```
+
+```{r}
+# inspect data frames
+head(visits)
+head(cart)
+head(checkout)
+head(purchase)
+```
+
+```{r}
+# define visits_cart here:
+visits_cart <- visits %>%
+left_join(cart)
+
+visits_cart
+```
+
+```{r}
+# define total_visits here:
+total_visits <- visits %>%
+summarize(n()) ## 2000 rows in visits
+
+total_visits
+```
+
+```{r}
+# define visit_no_cart here:
+visit_no_cart <- visits_cart %>%
+filter(is.na(cart_time)) %>%
+summarize(n()) ## 1652 rows are NA
+## these rows mean who did not buy any T-shirts
+
+visit_no_cart
+```
+
+```{r}
+# calculate visit_no_cart_percent here:
+visit_no_cart_percent <- visit_no_cart/total_visits
+visit_no_cart_percent ## 82.6%
+```
+
+```{r}
+# define cart_checkout here:
+cart_checkout <- cart %>%
+left_join(checkout)
+
+cart_checkout
+```
+
+```{r}
+# define total_carts here:
+total_carts <- cart %>%
+summarize(n()) ## 348 rows in carts
+
+total_carts
+```
+
+```{r}
+# define cart_no_checkout here:
+cart_no_checkout <- cart_checkout %>%
+filter(is.na(checkout_time)) %>%
+summarize(n()) ## 122 rows are NA
+
+cart_no_checkout
+```
+
+```{r}
+# calculate cart_no_checkout_percent here:
+cart_no_checkout_percent <- cart_no_checkout/total_carts
+
+cart_no_checkout_percent ## 35.05%
+```
+
+```{r}
+# define all_data here:
+all_data <- visits %>%
+left_join(cart) %>%
+left_join(checkout) %>%
+left_join(purchase)
+
+head(all_data)
+```
+
+```{r}
+# define total_checkout here:
+total_checkout <- all_data %>%
+filter(!(is.na(checkout_time))) %>%
+summarize(n()) ## 226 checkouts
+
+total_checkout
+```
+
+```{r}
+# define checkout_no_purchase here:
+checkout_no_purchase <- all_data %>%
+filter(!(is.na(checkout_time)) & is.na(purchase_time)) %>%
+summarize(n()) ## 82 checkouts but no purchase
+
+checkout_no_purchase
+```
+
+```{r}
+# calculate checkout_no_purchase_percent here:
+checkout_no_purchase_percent <- checkout_no_purchase/total_checkout
+
+checkout_no_purchase_percent ## 36.28%
+
+## visit_no_cart_percent is over 80% (the highest)
+## the weakest funnel is to put items in a cart
+```
+
+```{r}
+# update all_data with time_to_purchase column here:
+all_data <- all_data %>%
+mutate(time_to_purchase = purchase_time - visit_time)
+```
+
+```{r}
+# inspect the updated all_data data frame here:
+head(all_data)
+```
+
+```{r}
+# define time_to_purchase here:
+time_to_purchase <- all_data %>%
+summarize(mean_time = mean(time_to_purchase, na.rm=TRUE))
+
+time_to_purchase
+```
