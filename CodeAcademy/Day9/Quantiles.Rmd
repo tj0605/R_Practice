@@ -1,0 +1,240 @@
+---
+title: "Quantiles"
+output: html_notebook
+---
+
+```{r}
+# load song data
+load("songs.Rda")
+```
+
+```{r}
+# define twenty_third_percentile here:
+twenty_third_percentile <- quantile(songs,0.23)
+```
+
+```{r}
+# ignore the code below here:
+
+tryCatch(print(paste("The value that splits 23% of the data is",twenty_third_percentile)), error=function(e) {print("You haven't defined twenty_third_percentile.")})
+```
+
+```{r}
+# define quartiles and deciles here:
+quartiles <- quantile(songs,c(0.25, 0.5, 0.75))
+```
+
+```{r}
+# define tenth here:
+deciles <- quantile(songs,c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9))
+tenth <- 3
+```
+
+```{r}
+# ignore the code below here:
+
+tryCatch(print(paste(c("The quartiles are",quartiles,collapse=" "))), error=function(e) {print("You haven't defined quartiles.")})
+
+tryCatch(print(paste(c("The deciles are",deciles,collapse=" "))), error=function(e) {print("You haven't defined deciles.")})
+```
+
+```{r}
+# define percentile and answer here:
+percentile <- quantile(songs,0.32)
+answer <- 'below'
+```
+
+```{r}
+# ignore the code below here:
+
+tryCatch(print(paste("Your percentile is",percentile)), error=function(e) {print("You haven't defined percentile")})
+```
+
+```{r message=FALSE, warning=FALSE}
+# load libraries
+library(ggplot2)
+```
+
+```{r}
+# load school data
+load("school_one.Rda")
+load("school_two.Rda")
+load("school_three.Rda")
+```
+
+```{r message=FALSE, echo=FALSE}
+# plot histogram and deciles for school one
+hist <- qplot(school_one,
+              geom="histogram",
+              main = 'School One',
+              xlab = 'SAT Score',
+              ylab = 'Count',
+              fill=I("blue"),
+              col=I("red"),
+              alpha=I(.2)) +
+        geom_vline(aes(xintercept=quantile(school_one,0.1),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+				geom_vline(aes(xintercept=quantile(school_one,0.2),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_one,0.3),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_one,0.4),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+        geom_vline(aes(xintercept=quantile(school_one,0.5),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+				geom_vline(aes(xintercept=quantile(school_one,0.6),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_one,0.7),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_one,0.8),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_one,0.9),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T)
+
+hist
+```
+
+```{r message=FALSE, echo=FALSE}
+# plot histogram and deciles for school two
+hist <- qplot(school_two,
+              geom="histogram",
+              main = 'School Two',
+              xlab = 'SAT Score',
+              ylab = 'Count',
+              fill=I("blue"),
+              col=I("red"),
+              alpha=I(.2)) +
+        geom_vline(aes(xintercept=quantile(school_two,0.1),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+				geom_vline(aes(xintercept=quantile(school_two,0.2),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_two,0.3),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_two,0.4),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+        geom_vline(aes(xintercept=quantile(school_two,0.5),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+				geom_vline(aes(xintercept=quantile(school_two,0.6),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_two,0.7),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_two,0.8),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_two,0.9),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T)
+
+hist
+```
+
+```{r message=FALSE, echo=FALSE}
+# plot histogram and deciles for school three
+hist <- qplot(school_three,
+              geom="histogram",
+              main = 'School Three',
+              xlab = 'SAT Score',
+              ylab = 'Count',
+              fill=I("blue"),
+              col=I("red"),
+              alpha=I(.2)) +
+        geom_vline(aes(xintercept=quantile(school_three,0.1),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+				geom_vline(aes(xintercept=quantile(school_three,0.2),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_three,0.3),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_three,0.4),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+        geom_vline(aes(xintercept=quantile(school_three,0.5),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+				geom_vline(aes(xintercept=quantile(school_three,0.6),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_three,0.7),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_three,0.8),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T) +
+  			geom_vline(aes(xintercept=quantile(school_three,0.9),
+                       color=I("blue")),
+                   linetype="solid",
+                   size=1,
+                   show.legend=T)
+
+hist
+```
