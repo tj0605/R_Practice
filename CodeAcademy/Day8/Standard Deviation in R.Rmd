@@ -1,0 +1,69 @@
+---
+title: "Standard Deviation"
+output:
+  html_notebook: 
+    code_folding: hide
+---
+```{r message=FALSE, warning=FALSE}
+# load libraries
+library(dplyr)
+library(tidyr)
+```
+
+```{r}
+load("lesson_data.Rda")
+variance <- function(x) mean((x-mean(x))^2)
+
+hist(nba_data, col=rgb(0,0,1,1/4),xlim=c(50,100), main="NBA and OkCupid",breaks=80)
+hist(okcupid_data,  col=rgb(1,0,0,1/4), add=T, breaks=80)
+legend("topright", c("NBA Data", "OkCupid Data"), fill=c("blue", "red"))
+box()
+
+print(paste("The mean of the NBA dataset is ", mean(nba_data)))
+print(paste("The mean of the OkCupid dataset is ",mean(okcupid_data)))
+
+print(paste("The variance of the NBA dataset is ", variance(nba_data)))
+print(paste("The variance of the OkCupid dataset is ", variance(okcupid_data)))
+```
+
+```{r}
+# Importing data and calculating variance
+load("lesson_data.Rda")
+variance <- function(x) mean((x-mean(x))^2)
+
+nba_variance <- variance(nba_data)
+okcupid_variance <- variance(okcupid_data)
+```
+
+```{r}
+# Change these variables to be the standard deviation of each dataset.
+nba_standard_deviation <- sqrt(nba_variance)
+okcupid_standard_deviation <- sqrt(okcupid_variance)
+
+#IGNORE CODE BELOW HERE
+print(paste("The standard deviation of the NBA dataset is ",nba_standard_deviation))
+print(paste("The standard deviation of the OkCupid dataset is ", okcupid_standard_deviation))
+```
+
+```{r}
+# Change these variables to be the standard deviation of each dataset.
+nba_standard_deviation <- sd(nba_data)
+okcupid_standard_deviation <- sd(okcupid_data)
+
+#IGNORE CODE BELOW HERE
+print(paste("The standard deviation of the NBA dataset is ",nba_standard_deviation))
+print(paste("The standard deviation of the OkCupid dataset is ", okcupid_standard_deviation))
+
+#Step 1: Calcualte the difference between the player's height and the means
+nba_difference <- 65 - nba_mean
+okcupid_difference <- 65 - okcupid_mean
+
+#Step 2: Use the difference between the point and the mean to find how many standard deviations the player is away from the mean.
+num_nba_deviations <- nba_difference / nba_standard_deviation
+num_okcupid_deviations <- okcupid_difference / okcupid_standard_deviation
+
+
+#IGNORE CODE BELOW HERE
+print(paste("Your basketball player is", num_nba_deviations,"standard deviations away from the mean of NBA player heights,"))
+print(paste("Your basketball player is ",num_okcupid_deviations," standard deviations away from the mean of OkCupid profile heights"))
+```

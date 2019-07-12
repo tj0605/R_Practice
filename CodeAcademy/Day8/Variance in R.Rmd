@@ -1,0 +1,66 @@
+---
+title: "Variance in R"
+output: html_notebook
+---
+```{r message=FALSE, warning=FALSE}
+# load data
+grades <- c(88, 82, 85, 84, 90)
+mean <- mean(grades)
+
+#Change these five variables
+difference_one <- grades[1] - mean
+difference_two <- grades[2] - mean
+difference_three <- grades[3] - mean
+difference_four <- grades[4] - mean
+difference_five <- grades[5] - mean
+
+#Change these five variables
+difference_one <- (88 - mean)^2
+difference_two <- (82 - mean)^2
+difference_three <- (85 - mean)^2
+difference_four <- (84 - mean)^2
+difference_five <- (90 - mean)^2
+
+print(paste("The mean of the data set is ", mean))
+
+print(paste("The first student is", round(difference_one, digits=2) , "percentage points away from the mean."))
+print(paste("The second student is ", round(difference_two, digits=2) , "percentage points away from the mean."))
+print(paste("The third student is",round(difference_three, digits=2) , "percentage points away from the mean."))
+print(paste("The fourth student is",round(difference_four, digits=2) , "percentage points away from the mean."))
+print(paste("The fifth student is",round(difference_five, digits=2) , "percentage points away from the mean."))
+
+#Part 1: Sum the differences
+difference_sum <- sum(difference_one,difference_two,difference_three,difference_four,difference_five)
+
+#Part 2: Average the differences
+average_difference <- difference_sum/5
+#IGNORE CODE BELOW HERE
+print(paste("The sum of the differences is ", format(difference_sum, scientific = FALSE )))
+print(paste("The average difference is " , format(average_difference, scientific = FALSE)))
+```
+
+```{r message=FALSE, warning=FALSE}
+#defining the variance of the population mean 
+variance <- function(x) mean((x-mean(x))^2)
+
+teacher_one_grades <- c(80.24, 81.15, 81.29, 82.12, 82.52, 82.54, 82.76, 83.37, 83.42, 83.45, 83.47, 83.79, 83.91, 83.98, 84.03, 84.69, 84.74, 84.89, 84.95, 84.95, 85.02, 85.18, 85.53, 86.29, 86.83, 87.29, 87.47, 87.62, 88.04, 88.5)
+teacher_two_grades <- c(65.82, 70.77, 71.46, 73.63, 74.62, 76.53, 76.86, 77.06, 78.46, 79.81, 80.64, 81.61, 81.84, 83.67, 84.44, 84.73, 84.74, 85.15, 86.55, 88.06, 88.53, 90.12, 91.27, 91.62, 92.86, 94.37, 95.64, 95.99, 97.69, 104.4)
+  
+#Set these two variables equal to the variance of each dataset using NumPy
+teacher_one_variance <- variance(teacher_one_grades)
+teacher_two_variance <- variance(teacher_two_grades)
+
+
+#IGNORE THE CODE BELOW HERE
+
+hist(teacher_one_grades, col=rgb(0,0,1,1/4),xlim=c(65,105), main="Teacher Grades One and Two", breaks=15)
+hist(teacher_two_grades,  col=rgb(1,0,0,1/4), add=T, breaks=15)
+legend("topright", c("Teacher 1", "Teacher 2"), fill=c("blue", "red"))
+box()
+
+print(paste("The mean of the test scores in teacher one's class is ", mean(teacher_one_grades)))
+print(paste("The mean of the test scores in teacher two's class is ", mean(teacher_two_grades)))
+
+print(paste("The variance of the test scores in teacher one's class is ", teacher_one_variance))
+print(paste("The variance of the test scores in teacher two's class is ", teacher_two_variance))
+```
