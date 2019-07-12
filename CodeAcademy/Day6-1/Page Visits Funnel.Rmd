@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 ```{r message = FALSE}
-# load packages
+# load packages 
 library(readr)
 library(dplyr)
 ```
